@@ -1,5 +1,6 @@
 package com.kamis.ecommerce.customer;
 
+import com.kamis.ecommerce.exception.CustomerNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;

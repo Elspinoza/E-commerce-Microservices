@@ -1,4 +1,4 @@
-package com.kamis.ecommerce.customer;
+package com.kamis.ecommerce.exception;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
