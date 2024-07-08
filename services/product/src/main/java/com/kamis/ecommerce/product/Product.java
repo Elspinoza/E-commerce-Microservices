@@ -22,7 +22,7 @@ public class Product {
 
     private String description;
 
-    private double availableQuantity;
+    private double available_quantity;
 
     private BigDecimal price;
 
