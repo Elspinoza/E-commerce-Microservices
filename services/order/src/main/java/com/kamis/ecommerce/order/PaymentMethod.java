@@ -7,4 +7,5 @@ public enum PaymentMethod {
     VISA,
     MASTER_CARD,
     BITCOIN
+
 }
