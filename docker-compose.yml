@@ -63,6 +63,7 @@ services:
     networks:
       - microservices-net
 
+
   kafka:
     image: confluentinc/cp-kafka:latest
     container_name: ms-kafka
