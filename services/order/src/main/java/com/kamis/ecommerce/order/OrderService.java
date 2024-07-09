@@ -2,6 +2,8 @@ package com.kamis.ecommerce.order;
 
 import com.kamis.ecommerce.customer.CustomerClient;
 import com.kamis.ecommerce.exception.BusinessException;
+import com.kamis.ecommerce.kafka.OrderConfirmation;
+import com.kamis.ecommerce.kafka.OrderProducer;
 import com.kamis.ecommerce.orderline.OrderLineRequest;
 import com.kamis.ecommerce.orderline.OrderLineService;
 import com.kamis.ecommerce.product.ProductClient;
@@ -18,6 +20,7 @@ public class OrderService {
     private final ProductClient productClient;
     private final OrderMapper mapper;
     private final OrderLineService orderLineService;
+    private final OrderProducer orderProducer;
 
     public Integer createOrder(OrderResquest request) {
 
@@ -27,7 +30,7 @@ public class OrderService {
 
         // purchase the product (it using the product microservice) (We'll use RestTemplate of OpenFeign)
 
-        this.productClient.purchaseProducts(request.products());
+        var purchasedProducts = this.productClient.purchaseProducts(request.products());
 
         // persist order
 
@@ -49,6 +52,17 @@ public class OrderService {
         // todo start payment process
 
         //send the order confirmation to our notification microservice (Kafka)
-        return null;
+
+        orderProducer.sendOrderConfirmation(
+                new OrderConfirmation(
+                        request.reference(),
+                        request.amount(),
+                        request.paymentMethod(),
+                        customer,
+                        purchasedProducts
+                )
+        );
+
+        return order.getId();
     }
 }
