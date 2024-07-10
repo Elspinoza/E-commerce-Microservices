@@ -55,8 +55,8 @@ public class OrderService {
 
         // todo start payment process
 
-        //send the order confirmation to our notification microservice (Kafka)
 
+        //send the order confirmation to our notification microservice (Kafka)
         orderProducer.sendOrderConfirmation(
                 new OrderConfirmation(
                         request.reference(),
