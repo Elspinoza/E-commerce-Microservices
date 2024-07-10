@@ -6,6 +6,8 @@ import com.kamis.ecommerce.kafka.OrderConfirmation;
 import com.kamis.ecommerce.kafka.OrderProducer;
 import com.kamis.ecommerce.orderline.OrderLineRequest;
 import com.kamis.ecommerce.orderline.OrderLineService;
+import com.kamis.ecommerce.payment.PaymentClient;
+import com.kamis.ecommerce.payment.PaymentRequest;
 import com.kamis.ecommerce.product.ProductClient;
 import com.kamis.ecommerce.product.PurchaseRequest;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,6 +27,7 @@ public class OrderService {
     private final OrderMapper mapper;
     private final OrderLineService orderLineService;
     private final OrderProducer orderProducer;
+    private final PaymentClient paymentClient;
 
     public Integer createOrder(OrderResquest request) {
 
@@ -33,15 +36,12 @@ public class OrderService {
                 .orElseThrow(()-> new BusinessException("Cannot create order:: No customer exists with the provided ID:: " + request.customerId()));
 
         // purchase the product (it using the product microservice) (We'll use RestTemplate of OpenFeign)
-
         var purchasedProducts = this.productClient.purchaseProducts(request.products());
 
         // persist order
-
         var order = this.repository.save(mapper.toOrder(request));
 
         // persist the order lines
-
         for (PurchaseRequest purchaseRequest: request.products()) {
             orderLineService.saveOrderLine(
                     new OrderLineRequest(
@@ -53,7 +53,15 @@ public class OrderService {
             );
         }
 
-        // todo start payment process
+        //start payment process
+        var paymentRequest = new PaymentRequest(
+                request.amount(),
+                request.paymentMethod(),
+                order.getId(),
+                order.getReference(),
+                customer
+        );
+        paymentClient.requestOrderPayment(paymentRequest);
 
 
         //send the order confirmation to our notification microservice (Kafka)
