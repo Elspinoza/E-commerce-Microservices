@@ -20,17 +20,18 @@ import static java.lang.String.format;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class NotificationConsumer {
+public class NotificationsConsumer {
 
     private final NotificationRepository repository;
-   private EmailService emailService;
+    private final EmailService emailService;
 
-    @KafkaListener(topics = "payment-topic")
+    @KafkaListener(id = "paymentGroup", topics = "payment-topic")
     public void consumePaymentSuccessNotification(PaymentConfirmation paymentConfirmation) throws MessagingException {
         log.info(format("Consuming the message from payment-topic Topic:: %s", paymentConfirmation));
         repository.save(
                 Notification.builder()
                         .type(PAYMENT_CONFIRMATION)
+                        .notificationDate(LocalDateTime.now())
                         .paymentConfirmation(paymentConfirmation)
                         .build()
         );
@@ -45,7 +46,7 @@ public class NotificationConsumer {
         );
     }
 
-    @KafkaListener(topics = "order-topic")
+    @KafkaListener(id = "orderGroup", topics = "order-topic")
     public void consumeOrderConfirmationNotification(OrderConfirmation orderConfirmation) throws MessagingException {
         log.info(format("Consuming the message from order-topic Topic:: %s", orderConfirmation));
         repository.save(
