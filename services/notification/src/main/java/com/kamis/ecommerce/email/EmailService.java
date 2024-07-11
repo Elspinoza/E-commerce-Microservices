@@ -95,7 +95,7 @@ public class EmailService {
             mailSender.send(mimeMessage);
             log.info(String.format("Info - Email successfully sent to %s with template %s", destinationEmail, htmlTemplate));
         } catch (MessagingException e) {
-            log.warn("WARNING - Email could not be sent to {}", destinationEmail);
+            log.warn("WARNING - Email couldn't be sent to {}", destinationEmail);
         }
     }
 }
