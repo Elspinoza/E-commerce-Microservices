@@ -20,6 +20,7 @@ import java.util.Map;
 import static com.kamis.ecommerce.email.EmailTemplates.ORDER_CONFIRMATION;
 import static com.kamis.ecommerce.email.EmailTemplates.PAYMENT_CONFIRMATION;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.springframework.mail.javamail.MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED;
 import static org.springframework.mail.javamail.MimeMessageHelper.MULTIPART_MODE_RELATED;
 
 @Service
@@ -38,7 +39,7 @@ public class EmailService {
             String orderReference
     ) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, MULTIPART_MODE_RELATED, UTF_8.name());
+        MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, MULTIPART_MODE_MIXED_RELATED, UTF_8.name());
         messageHelper.setFrom("inolatse@gmail.com");
         final String templateName = PAYMENT_CONFIRMATION.getTemplate();
 
@@ -73,7 +74,7 @@ public class EmailService {
             List<Product> products
     ) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, MULTIPART_MODE_RELATED, UTF_8.name());
+        MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, MULTIPART_MODE_MIXED_RELATED, UTF_8.name());
         messageHelper.setFrom("inolatse@gmail.com");
         final String templateName = ORDER_CONFIRMATION.getTemplate();
 
