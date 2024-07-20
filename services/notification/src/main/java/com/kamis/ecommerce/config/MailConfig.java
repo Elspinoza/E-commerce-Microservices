@@ -25,5 +25,6 @@ public class MailConfig {
         props.put("mail.debug", "true"); // Enable debug mode for troubleshooting
 
         return mailSender;
+        //hhh
     }
 }
