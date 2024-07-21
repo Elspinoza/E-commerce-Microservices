@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class OrderMapper {
-    public Order toOrder(OrderResquest request) {
+    public Order toOrder(OrderRequest request) {
 
         if (request == null) return null;
 

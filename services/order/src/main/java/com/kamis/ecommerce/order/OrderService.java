@@ -30,7 +30,7 @@ public class OrderService {
     private final PaymentClient paymentClient;
 
 //    @Transactional
-    public Integer createOrder(OrderResquest request) {
+    public Integer createOrder(OrderRequest request) {
 
         //check the customer if is present or not --> OpenFeign
         var customer = this.customerClient.findCustomerById(request.customerId())

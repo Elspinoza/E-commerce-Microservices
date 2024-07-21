@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public record OrderResquest(
+public record OrderRequest(
 
         Integer id,
         String reference,
