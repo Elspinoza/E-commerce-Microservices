@@ -21,7 +21,6 @@ import static com.kamis.ecommerce.email.EmailTemplates.ORDER_CONFIRMATION;
 import static com.kamis.ecommerce.email.EmailTemplates.PAYMENT_CONFIRMATION;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.springframework.mail.javamail.MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED;
-import static org.springframework.mail.javamail.MimeMessageHelper.MULTIPART_MODE_RELATED;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +40,7 @@ public class EmailService {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, MULTIPART_MODE_MIXED_RELATED, UTF_8.name());
         messageHelper.setFrom("inolatse@gmail.com");
+
         final String templateName = PAYMENT_CONFIRMATION.getTemplate();
 
         Map<String, Object> variables = new HashMap<>();
@@ -58,7 +58,7 @@ public class EmailService {
 
             messageHelper.setTo(destinationEmail);
             mailSender.send(mimeMessage);
-            log.info(String.format("Info - Email successfully sent to %s with template %s", destinationEmail, htmlTemplate));
+            log.info(String.format("Info - Email successfully sent to %s with template %s", destinationEmail, templateName));
         } catch (MessagingException e) {
             log.warn("WARNING - Email could not be sent to {}", destinationEmail);
         }
@@ -73,14 +73,16 @@ public class EmailService {
             String orderReference,
             List<Product> products
     ) throws MessagingException {
+
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, MULTIPART_MODE_MIXED_RELATED, UTF_8.name());
         messageHelper.setFrom("inolatse@gmail.com");
+
         final String templateName = ORDER_CONFIRMATION.getTemplate();
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("customerName", customerName);
-        variables.put("TotalAmount", amount);
+        variables.put("totalAmount", amount);
         variables.put("orderReference", orderReference);
         variables.put("products", products);
 
@@ -94,7 +96,7 @@ public class EmailService {
 
             messageHelper.setTo(destinationEmail);
             mailSender.send(mimeMessage);
-            log.info(String.format("Info - Email successfully sent to %s with template %s", destinationEmail, htmlTemplate));
+            log.info(String.format("Info - Email successfully sent to %s with template %s", destinationEmail, templateName));
         } catch (MessagingException e) {
             log.warn("WARNING - Email couldn't be sent to {}", destinationEmail);
         }
