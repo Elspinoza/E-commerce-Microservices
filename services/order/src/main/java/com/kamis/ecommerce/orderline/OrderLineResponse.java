@@ -1,6 +1,6 @@
 package com.kamis.ecommerce.orderline;
 
-public record OrdderLineResponse(
+public record OrderLineResponse(
         Integer id,
         double quantity
 ) {

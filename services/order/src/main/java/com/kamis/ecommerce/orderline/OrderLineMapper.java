@@ -1,27 +1,25 @@
 package com.kamis.ecommerce.orderline;
 
 import com.kamis.ecommerce.order.Order;
-import lombok.Builder;
 import org.springframework.stereotype.Service;
 
 @Service
-@Builder
 public class OrderLineMapper {
     public OrderLine toOrderLine(OrderLineRequest request) {
         return OrderLine.builder()
-                .id(request.id())
-                .quantity(request.quantity())
+                .id(request.orderId())
+                .productId(request.productId())
                 .order(
                         Order.builder()
                                 .id(request.orderId())
                                 .build()
                 )
-                .productId(request.productId())
+                .quantity(request.quantity())
                 .build();
     }
 
-    public OrdderLineResponse toOrderLineResponse(OrderLine orderLine) {
-        return new OrdderLineResponse(
+    public OrderLineResponse toOrderLineResponse(OrderLine orderLine) {
+        return new OrderLineResponse(
                 orderLine.getId(),
                 orderLine.getQuantity()
         );
