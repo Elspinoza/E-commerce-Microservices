@@ -13,6 +13,7 @@ import com.kamis.ecommerce.product.PurchaseRequest;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +30,7 @@ public class OrderService {
     private final OrderProducer orderProducer;
     private final PaymentClient paymentClient;
 
-//    @Transactional
+    @Transactional
     public Integer createOrder(OrderRequest request) {
 
         //check the customer if is present or not --> OpenFeign
