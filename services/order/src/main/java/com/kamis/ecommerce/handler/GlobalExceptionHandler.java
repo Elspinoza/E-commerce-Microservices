@@ -2,6 +2,7 @@ package com.kamis.ecommerce.handler;
 
 import com.kamis.ecommerce.exception.BusinessException;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,25 +16,18 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<String> handle(BusinessException exp) {
-        return ResponseEntity
-                .status(BAD_REQUEST)
-                .body(exp.getMsg());
-    }
-
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<String> handle(EntityNotFoundException exp) {
         return ResponseEntity
-                .status(BAD_REQUEST)
+                .status(HttpStatus.NOT_FOUND)
                 .body(exp.getMessage());
     }
 
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handle(MethodArgumentNotValidException exp) {
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exp) {
         var errors = new HashMap<String, String>();
         exp.getBindingResult().getAllErrors()
                 .forEach(error -> {
@@ -45,5 +39,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(BAD_REQUEST)
                 .body(new ErrorResponse(errors));
+    }
+
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<String> handle(BusinessException exp) {
+        return ResponseEntity
+                .status(BAD_REQUEST)
+                .body(exp.getMsg());
     }
 }

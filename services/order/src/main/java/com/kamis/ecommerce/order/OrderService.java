@@ -13,7 +13,6 @@ import com.kamis.ecommerce.product.PurchaseRequest;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +29,7 @@ public class OrderService {
     private final OrderProducer orderProducer;
     private final PaymentClient paymentClient;
 
-    @Transactional
+//    @Transactional
     public Integer createOrder(OrderResquest request) {
 
         //check the customer if is present or not --> OpenFeign
@@ -38,7 +37,7 @@ public class OrderService {
                 .orElseThrow(()-> new BusinessException("Cannot create order:: No customer exists with the provided ID:: " + request.customerId()));
 
         // purchase the product (it using the product microservice) (We'll use RestTemplate of OpenFeign)
-        var purchasedProducts = this.productClient.purchaseProducts(request.products());
+        var purchasedProducts = productClient.purchaseProducts(request.products());
 
         // persist order
         var order = this.repository.save(mapper.toOrder(request));
@@ -80,16 +79,16 @@ public class OrderService {
         return order.getId();
     }
 
-    public List<OrderResponse> findAll() {
-        return repository.findAll()
+    public List<OrderResponse> findAllOrders() {
+        return this.repository.findAll()
                 .stream()
-                .map(mapper::fromOrder)
+                .map(this.mapper::fromOrder)
                 .collect(Collectors.toList());
     }
 
-    public OrderResponse findById(Integer orderId) {
-        return repository.findById(orderId)
-                .map(mapper::fromOrder)
-                .orElseThrow(()-> new EntityNotFoundException(String.format("No order found with the provided ID: %d", orderId)));
+    public OrderResponse findById(Integer id) {
+        return this.repository.findById(id)
+                .map(this.mapper::fromOrder)
+                .orElseThrow(()-> new EntityNotFoundException(String.format("No order found with the provided ID: %d", id)));
     }
 }

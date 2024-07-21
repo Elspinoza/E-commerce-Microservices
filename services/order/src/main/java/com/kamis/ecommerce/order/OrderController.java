@@ -12,7 +12,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderRepository repository;
     private final OrderService service;
 
     @PostMapping
@@ -24,7 +23,7 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<List<OrderResponse>> findAll() {
-        return ResponseEntity.ok(service.findAll());
+        return ResponseEntity.ok(service.findAllOrders());
     }
 
     @GetMapping("/{order-id}")

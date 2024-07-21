@@ -27,6 +27,7 @@ public class Order {
     @GeneratedValue
     private Integer id;
 
+    @Column(unique = true, nullable = false)
     private String reference;
 
     private BigDecimal totalAmount;
@@ -37,7 +38,7 @@ public class Order {
     private String customerId;
 
     @OneToMany(mappedBy = "order")
-    private List<OrderLine> orderLine;
+    private List<OrderLine> orderLines;
 
     @CreatedDate
     @Column(updatable = false, nullable = false)

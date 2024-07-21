@@ -1,18 +1,19 @@
 package com.kamis.ecommerce.order;
 
-import lombok.Builder;
 import org.springframework.stereotype.Service;
 
 @Service
-@Builder
 public class OrderMapper {
     public Order toOrder(OrderResquest request) {
+
+        if (request == null) return null;
+
         return Order.builder()
                 .id(request.id())
-                .customerId(request.customerId())
                 .reference(request.reference())
-                .totalAmount(request.amount())
+//                .totalAmount(request.amount())
                 .paymentMethod(request.paymentMethod())
+                .customerId(request.customerId())
                 .build();
     }
 
